@@ -7,9 +7,9 @@ RUN apk add --no-cache \
 	socat \
 	&& rm -rf /var/cache/apk/*
 
-# Copy entrypoint script to container
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod a+x /entrypoint.sh
+# Copy entry script to container
+COPY entry.sh /entry.sh
+RUN chmod a+x /entry.sh
 
 # Setup environment variables; export SSH_AUTH_SOCK from socket directory
 ENV SOCKET_DIR /.ssh-agent
@@ -18,6 +18,6 @@ ENV SSH_AUTH_PROXY_SOCK ${SOCKET_DIR}/proxy-socket
 
 VOLUME ${SOCKET_DIR}
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entry.sh"]
 
 CMD ["ssh-agent"]
