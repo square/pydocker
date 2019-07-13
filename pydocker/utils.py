@@ -143,6 +143,9 @@ class LocalContainer:
         import google.auth
 
         _, project = google.auth.default()
+            if project is None:
+                raise ValueError("google.auth.default() could not determine cloud project on laptop")
+        
         self.environment["GOOGLE_CLOUD_PROJECT"] = project
         self.environment[
             "GOOGLE_APPLICATION_CREDENTIALS"
