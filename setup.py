@@ -20,7 +20,7 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['docker', 'click', 'delegator.py', 'google-auth']
+requirements = ['docker', 'click', 'delegator.py', 'google-auth', 'flask']
 
 extras_require = {'test': ['pytest', 'flake8']}
 

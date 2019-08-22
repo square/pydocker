@@ -1,19 +1,20 @@
 - [pydocker](#pydocker)
-- [Setup](#Setup)
-  - [Docker setup](#Docker-setup)
-  - [Build Example Image](#Build-Example-Image)
-  - [Install pydocker](#Install-pydocker)
-  - [Setup pydocker](#Setup-pydocker)
-- [Using pydocker](#Using-pydocker)
-  - [Start ssh-agent container](#Start-ssh-agent-container)
-  - [Launch](#Launch)
-    - [Google Cloud Setup (optional)](#Google-Cloud-Setup-optional)
-  - [Development](#Development)
-    - [Setup](#Setup-1)
-    - [Tests](#Tests)
-    - [Continuous Integrations](#Continuous-Integrations)
-    - [Versions and Tags](#Versions-and-Tags)
-  - [License](#License)
+- [Setup](#setup)
+  - [Docker setup](#docker-setup)
+  - [Build Example Image](#build-example-image)
+  - [Install pydocker](#install-pydocker)
+  - [Setup pydocker](#setup-pydocker)
+- [Using pydocker](#using-pydocker)
+  - [Start ssh-agent container](#start-ssh-agent-container)
+  - [Launch](#launch)
+    - [Google Cloud Setup (optional)](#google-cloud-setup-optional)
+  - [Status Server](#status-server)
+  - [Development](#development)
+    - [Setup](#setup-1)
+    - [Tests](#tests)
+    - [Continuous Integrations](#continuous-integrations)
+    - [Versions and Tags](#versions-and-tags)
+  - [License](#license)
 
 
 # pydocker
@@ -78,6 +79,7 @@ Commands:
   agent
   init
   launch
+  status
 ```
 
 
@@ -137,6 +139,15 @@ gcloud auth application-default login
 ```bash
 gcloud compute ssh --zone "us-central1-a" "RUNNING_VM"
 ```
+
+## Status Server
+```bash
+python status
+```
+This will open a status server which will show a page with information about all local containers.  This includes a link to clink into any with open port forwarding.
+
+![Container Status](status.png "Container Status")
+
 
 ## Development
 
