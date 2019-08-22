@@ -2,6 +2,7 @@ from __future__ import print_function
 import click
 import logging
 from pydocker.utils import LocalContainer, setup_machine, start_ssh
+from pydocker.status import start_server
 
 logging.basicConfig(
     format="%(asctime)s:%(name)s:%(levelname)s: %(message)s",
@@ -61,6 +62,12 @@ def launch(**kwargs):
     if kwargs['gcloud']:
         container.gcloud()
     container.run()
+
+
+@cli.command()
+@common_options
+def status(**kwargs):
+    start_server()
 
 
 if __name__ == "__main__":

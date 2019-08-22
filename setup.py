@@ -20,13 +20,13 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['docker', 'click', 'delegator.py', 'google-auth']
+requirements = ['docker', 'click', 'delegator.py', 'google-auth', 'flask']
 
 extras_require = {'test': ['pytest', 'flake8']}
 
 setup(
     name='sq-pydocker',
-    version='0.2.3',
+    version='0.3.0',
     description='Python package to make it easier to manage docker containers',
     long_description=readme,
     long_description_content_type='text/markdown',
