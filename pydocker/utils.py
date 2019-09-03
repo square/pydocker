@@ -155,6 +155,15 @@ class LocalContainer:
             "mode": "rw",
         }
 
+    def stream_logs(container):
+        for log in container.logs(stream=True):
+            try:
+                # assume bytes output from container logs
+                print(log.rstrip().decode('utf-8'))
+            except AttributeError:
+                # accept string output
+                print(log.rstrip())
+
     def run(self):
         logger.info("Starting docker container")
         try:
@@ -186,5 +195,5 @@ class LocalContainer:
                 ports={'8888/tcp': self.port},
             )
         if self.logs:
-            for log in output.logs(stream=True):
-                print(log.rstrip())
+            # blocks on container logs
+            LocalContainer.stream_logs(output)
