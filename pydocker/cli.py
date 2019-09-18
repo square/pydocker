@@ -31,8 +31,8 @@ def common_options(func):
     options = [
         click.option("-i", "--image", help='Docker image'),
         click.option("-n", "--name", help='container name'),
-        click.option("-d", "--working_dir", help='host directory to mount'),
-        click.option("-p", "--port", default=8888, help='local port to be connected to container'),
+        click.option("-d", "--working_dir", default=None, help='host directory to mount'),
+        click.option("-p", "--port", default=8888, help='Host port to be connected to container port 8888'),
         click.option("-l", "--logs", is_flag=True, help='stream container logs'),
         click.option('--gcloud/--no-gcloud', default=True, help='include gcloud credentials'),
         click.option("-c", "--command", default=None, help='command which is passed to container'),
