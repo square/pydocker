@@ -142,7 +142,7 @@ gcloud compute ssh --zone "us-central1-a" "RUNNING_VM"
 
 ## Status Server
 ```bash
-python status
+pydocker status
 ```
 This will open a status server which will show a page with information about all local containers.  This includes a link to clink into any with open port forwarding.
 
