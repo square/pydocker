@@ -134,10 +134,12 @@ class LocalContainer:
         self.volumes = self.config["volumes"]
 
         # Mount working directory
-        self.volumes[abspath(expanduser(working_dir))] = {
-            "bind": "/current/working_dir/",
-            "mode": "rw",
-        }
+        if working_dir is not None:
+            print(f"Working dir: {working_dir}")
+            self.volumes[abspath(expanduser(working_dir))] = {
+                "bind": "/current/working_dir/",
+                "mode": "rw",
+            }
 
     def gcloud(self):
         import google.auth

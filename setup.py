@@ -26,7 +26,7 @@ extras_require = {'test': ['pytest', 'flake8']}
 
 setup(
     name='sq-pydocker',
-    version='0.3.0',
+    version='0.3.1',
     description='Python package to make it easier to manage docker containers',
     long_description=readme,
     long_description_content_type='text/markdown',
