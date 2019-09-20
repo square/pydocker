@@ -24,7 +24,7 @@ requirements = ['docker', 'click', 'delegator.py', 'google-auth', 'flask']
 
 extras_require = {
     'test': ['pytest', 'pytest-cov', 'flake8'],
-    'doc': ['sphinx', 'numpydoc', 'sphinx-rtd-theme', 'sphinx-autobuild', 'nbsphinx']
+    'doc': ['sphinx', 'numpydoc', 'sphinx-rtd-theme', 'sphinx-autobuild']
 }
 
 setup(
