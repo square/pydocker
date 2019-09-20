@@ -22,7 +22,10 @@ with open('README.md') as readme_file:
 
 requirements = ['docker', 'click', 'delegator.py', 'google-auth', 'flask']
 
-extras_require = {'test': ['pytest', 'flake8']}
+extras_require = {
+    'test': ['pytest', 'pytest-cov', 'flake8'],
+    'doc': ['sphinx', 'numpydoc', 'sphinx-rtd-theme', 'sphinx-autobuild']
+}
 
 setup(
     name='sq-pydocker',
