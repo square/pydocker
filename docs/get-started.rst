@@ -106,14 +106,16 @@ Launch
 ::
 
     Options:
-      -i, --image TEXT        Docker image
-      -n, --name TEXT         container name
-      -d, --working_dir TEXT  host directory to mount
-      -p, --port INTEGER      local port to be connected to container
-      -l, --logs              stream container logs
-      --gcloud / --no-gcloud  include gcloud credentials
-      -c, --command TEXT      command which is passed to container
-      --help                  show this message and exit.
+        -i, --image TEXT        Docker image
+        -n, --name TEXT         container name
+        -d, --working-dir TEXT  host directory to mount
+        -p, --port INTEGER      Host port to be connected to container port 8888
+        -l, --no-logs           disable streaming of container logs
+        --gcloud / --no-gcloud  include gcloud credentials
+        -c, --command TEXT      command which is passed to container
+        -r, --rm                enable auto-removal of the container on daemon side
+                                when the container’s process exits
+        --help                  Show this message and exit.
 
 This command launches the notebook (which we built above) and forwards
 internal port 8888 to the laptops port 9000 and creates a container
@@ -124,13 +126,13 @@ in your browser.
 
 ::
 
-    pydocker launch --image notebook --name test --working_dir . --port 9000 --no-gcloud
+    pydocker launch --image notebook --name test --working-dir . --port 9000 --no-gcloud
 
 Remote images also work:
 
 ::
 
-    pydocker launch --image jupyter/minimal-notebook:latest --name example --working_dir . --port 9000 --no-gcloud
+    pydocker launch --image jupyter/minimal-notebook:latest --name example --working-dir . --port 9000 --no-gcloud
 
 Will pull the remote image down first. You can still do
 ``docker pull IMAGE`` and pydocker will use the already downloaded

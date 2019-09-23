@@ -74,8 +74,9 @@ class LocalContainer:
         name,
         working_dir,
         port,
-        logs=False,
+        logs=True,
         command='jupyter notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=""',
+        rm=False,
         **kwargs
     ):
         """Setup local container with users gcloud credentials, and ssh-agent.
@@ -91,10 +92,12 @@ class LocalContainer:
         port : int
             Port mapped to host machine (laptop)
         logs : bool, optional
-            Show container logs (the default is False)
+            Show container logs (the default is True)
         command : str, optional
             Command to be run on startup (the default is
             'jupyter notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=""'s])
+        autoremmove : str, optional
+            Delete the container after run is complete (the default is False)
 
         """
         self.image = image
@@ -104,9 +107,12 @@ class LocalContainer:
         self.client = docker.from_env()
         self.logs = logs
         self.command = command
+        self.autoremove = rm
         try:
             self.client.images.get(image)
-            logger.info("Using local image")
+            logger.warning(
+                "{image} is found locally, new image will not be pulled".format(image=image)
+            )
         except docker.errors.ImageNotFound:
             logger.info("Image not found, pulling")
             last_status = None
@@ -135,7 +141,7 @@ class LocalContainer:
 
         # Mount working directory
         if working_dir is not None:
-            print(f"Working dir: {working_dir}")
+            print("Working dir: {working_dir}".format(working_dir=working_dir))
             self.volumes[abspath(expanduser(working_dir))] = {
                 "bind": "/current/working_dir/",
                 "mode": "rw",
@@ -181,6 +187,7 @@ class LocalContainer:
                 stdout=True,
                 detach=True,
                 ports={'8888/tcp': self.port},
+                auto_remove=self.autoremove,
             )
         except docker.errors.NotFound:
             self.environment.pop('SSH_AUTH_SOCK')
@@ -195,6 +202,7 @@ class LocalContainer:
                 stdout=True,
                 detach=True,
                 ports={'8888/tcp': self.port},
+                auto_remove=self.autoremove,
             )
         if self.logs:
             # blocks on container logs

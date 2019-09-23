@@ -97,7 +97,7 @@ This will add keys copied with the `init` command without passwords automaticall
 Options:
   -i, --image TEXT        Docker image
   -n, --name TEXT         container name
-  -d, --working_dir TEXT  host directory to mount
+  -d, --working-dir TEXT  host directory to mount
   -p, --port INTEGER      local port to be connected to container
   -l, --logs              stream container logs
   --gcloud / --no-gcloud  include gcloud credentials
@@ -105,15 +105,15 @@ Options:
   --help                  show this message and exit.
 ```
 
-This command launches the notebook (which we built above) and forwards internal port 8888 to the laptops port 9000 and creates a container named test.  In addition the host's current folder `.` is mounted in the **working_dir** folder. This gives the container access to the host filesystem. After running the command you can go to `localhost:9000` in your browser.
+This command launches the notebook (which we built above) and forwards internal port 8888 to the laptops port 9000 and creates a container named test.  In addition the host's current folder `.` is mounted in the **working-dir** folder. This gives the container access to the host filesystem. After running the command you can go to `localhost:9000` in your browser.
 
 ```
-pydocker launch --image notebook --name test --working_dir . --port 9000 --no-gcloud
+pydocker launch --image notebook --name test --working-dir . --port 9000 --no-gcloud
 ```
 
 Remote images also work:
 ```
-pydocker launch --image jupyter/minimal-notebook:latest --name example --working_dir . --port 9000 --no-gcloud
+pydocker launch --image jupyter/minimal-notebook:latest --name example --working-dir . --port 9000 --no-gcloud
 ```
 Will pull the remote image down first. You can still do `docker pull IMAGE` and pydocker will use the already downloaded image.
 
