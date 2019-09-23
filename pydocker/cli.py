@@ -31,11 +31,19 @@ def common_options(func):
     options = [
         click.option("-i", "--image", help='Docker image'),
         click.option("-n", "--name", help='container name'),
-        click.option("-d", "--working_dir", default=None, help='host directory to mount'),
-        click.option("-p", "--port", default=8888, help='Host port to be connected to container port 8888'),
-        click.option("-l", "--logs", is_flag=True, help='stream container logs'),
+        click.option("-d", "--working-dir", default=None, help='host directory to mount'),
+        click.option(
+            "-p", "--port", default=8888, help='Host port to be connected to container port 8888'
+        ),
+        click.option("-l", "--no-logs", flag_value=True, help='disable streaming of container logs'),
         click.option('--gcloud/--no-gcloud', default=True, help='include gcloud credentials'),
         click.option("-c", "--command", default=None, help='command which is passed to container'),
+        click.option(
+            "-r",
+            "--rm",
+            flag_value=True,
+            help='enable auto-removal of the container on daemon side when the container’s process exits', # NOQA
+        ),
     ]
     for option in reversed(options):
         func = option(func)
@@ -58,6 +66,8 @@ def agent():
 @common_options
 def launch(**kwargs):
     click.secho('Port forwarded to {}'.format(kwargs['port']), fg='magenta', bold=True, blink=True)
+    if kwargs.get('no_logs'):
+        kwargs['logs'] = False
     container = LocalContainer(**kwargs)
     if kwargs['gcloud']:
         container.gcloud()

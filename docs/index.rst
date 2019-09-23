@@ -1,6 +1,6 @@
-======
+=========
 Pydocker
-======
+=========
 
 .. note::  Pydocker is in alpha and under active development.
 
