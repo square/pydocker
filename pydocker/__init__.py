@@ -2,6 +2,6 @@
 
 __author__ = """Damien Ramunno-Johnson"""
 __email__ = 'damien@squareup.com'
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 from pydocker import ssh, utils # NOQA

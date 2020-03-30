@@ -29,7 +29,7 @@ extras_require = {
 
 setup(
     name='sq-pydocker',
-    version='0.3.2',
+    version='0.3.3',
     description='Python package to make it easier to manage docker containers',
     long_description=readme,
     long_description_content_type='text/markdown',
