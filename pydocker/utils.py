@@ -88,7 +88,7 @@ class LocalContainer:
         name : str
             Pick container name
         working_dir : str
-            Path that you want mounted in container
+            Path that you want mounted in container, will be mounted in /mnt
         port : int
             Port mapped to host machine (laptop)
         logs : bool, optional
@@ -143,7 +143,7 @@ class LocalContainer:
         if working_dir is not None:
             print("Working dir: {working_dir}".format(working_dir=working_dir))
             self.volumes[abspath(expanduser(working_dir))] = {
-                "bind": "/current/working_dir/",
+                "bind": "/mnt/working_dir/",
                 "mode": "rw",
             }
 
