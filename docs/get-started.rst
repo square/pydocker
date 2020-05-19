@@ -80,7 +80,11 @@ Using pydocker
       agent
       init
       launch
+      remove
+      remove-all
       status
+      stop
+      stop-all
 
 Start ssh-agent container
 -------------------------
@@ -186,3 +190,27 @@ open port forwarding.
    :alt: Container Status
 
    Container Status
+
+
+
+Remove Containers
+-------------
+
+.. code:: bash
+
+   pydocker remove-all
+   pydocker remove CONTAINER_NAME
+
+This delete all running containers, or just the one selected.
+
+
+
+Stop Containers
+-------------
+
+.. code:: bash
+
+   pydocker stop-all
+   pydocker stop CONTAINER_NAME
+
+This stop all running containers, or just the one selected.
