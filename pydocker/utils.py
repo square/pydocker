@@ -27,13 +27,13 @@ def setup_machine():
     """Setup laptop for first use. This includes creating ssh config, and making a copy of credentials.
     """
     client = docker.from_env()
-    if client.info().get('ServerVersion') < '18.09.2':
-        raise ('Docker server needs to be at least 18.09.2')
-    ssh_path = os.path.join(expanduser('~'), '.ssh')
-    cloud_path = os.path.join(ssh_path, 'cloud_keys')
-    config_path = os.path.join(cloud_path, 'config')
-    bash('mkdir -p {}'.format(cloud_path))
-    bash('cp ~/.ssh/config ~/.ssh/{}/config'.format('cloud_keys'))
+    if client.info().get("ServerVersion") < "18.09.2":
+        raise ("Docker server needs to be at least 18.09.2")
+    ssh_path = os.path.join(expanduser("~"), ".ssh")
+    cloud_path = os.path.join(ssh_path, "cloud_keys")
+    config_path = os.path.join(cloud_path, "config")
+    bash("mkdir -p {}".format(cloud_path))
+    bash("cp ~/.ssh/config ~/.ssh/{}/config".format("cloud_keys"))
     bash("sed -i '' '/.*UseKeychain.*/d' ~/.ssh/cloud_keys/config")
     bash("sed -i '' '/.*ControlPath .*/d' ~/.ssh/cloud_keys/config")
 
@@ -44,18 +44,18 @@ def setup_machine():
     """.format(
         getpass.getuser()
     )
-    with open(config_path, 'r') as h:
+    with open(config_path, "r") as h:
         conents = h.read()
-    with open(config_path, 'w') as h:
+    with open(config_path, "w") as h:
         h.write(config)
-    with open(config_path, 'a') as h:
+    with open(config_path, "a") as h:
         h.write(conents)
-    keys = [splitext(x)[0] for x in glob.glob(os.path.join(ssh_path, '*.pub'))]
+    keys = [splitext(x)[0] for x in glob.glob(os.path.join(ssh_path, "*.pub"))]
     for key in keys:
-        logger.info('Adding key {}'.format(key))
+        logger.info("Adding key {}".format(key))
         dest = os.path.join(cloud_path, basename(key))
         if os.path.lexists(dest) is False:
-            bash('cp {} {}'.format(key, dest))
+            bash("cp {} {}".format(key, dest))
 
 
 def start_ssh():
@@ -65,6 +65,38 @@ def start_ssh():
         ssh.add_keys()
     except docker.errors.APIError as e:
         print(e)
+
+
+def delete_container(name=None):
+    client = docker.from_env()
+    containers = client.containers.list()
+    if name is None:
+        for container in containers:
+            container.stop()
+            container.remove()
+            logger.info("Containers deleted")
+    else:
+        for container in containers:
+            if container.name == name:
+                container.stop()
+                container.remove()
+                logger.info(f"Container {name} removed")
+                break
+
+
+def stop_container(name=None):
+    client = docker.from_env()
+    containers = client.containers.list()
+    if name is None:
+        for container in containers:
+            container.stop()
+            logger.info("Containers stopped")
+    else:
+        for container in containers:
+            if container.name == name:
+                container.stop()
+                logger.info(f"Container {name} stopped")
+                break
 
 
 class LocalContainer:
@@ -77,7 +109,7 @@ class LocalContainer:
         logs=True,
         command='jupyter notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=""',
         rm=False,
-        **kwargs
+        **kwargs,
     ):
         """Setup local container with users gcloud credentials, and ssh-agent.
 
@@ -111,30 +143,32 @@ class LocalContainer:
         try:
             self.client.images.get(image)
             logger.warning(
-                "{image} is found locally, new image will not be pulled".format(image=image)
+                "{image} is found locally, new image will not be pulled".format(
+                    image=image
+                )
             )
         except docker.errors.ImageNotFound:
             logger.info("Image not found, pulling")
             last_status = None
-            if len(image.split(':')) == 1:
-                tag = 'latest'
+            if len(image.split(":")) == 1:
+                tag = "latest"
                 repository = image
             else:
-                repository, tag = image.split(':')
+                repository, tag = image.split(":")
             for line in self.client.api.pull(repository, tag, stream=True, decode=True):
-                status = line.get('status')
-                progress = line.get('progress')
+                status = line.get("status")
+                progress = line.get("progress")
                 if status is not None and status != last_status:
                     print(status)
                     last_status = status
                 if progress is not None:
-                    print(progress, end='\r')
+                    print(progress, end="\r")
 
         # Setup enviroment variables, etc for container
         self.config = ssh.params()
         self.environment = self.config["environment"]
         self.environment["CLOUD"] = False
-        self.environment["DOCKER"] = 'true'
+        self.environment["DOCKER"] = "true"
 
         # Mount user gcloud credentials
         self.volumes = self.config["volumes"]
@@ -152,12 +186,14 @@ class LocalContainer:
 
         _, project = google.auth.default()
         if project is None:
-            raise ValueError("google.auth.default() could not determine cloud project on laptop")
+            raise ValueError(
+                "google.auth.default() could not determine cloud project on laptop"
+            )
 
         self.environment["GOOGLE_CLOUD_PROJECT"] = project
         self.environment[
             "GOOGLE_APPLICATION_CREDENTIALS"
-        ] = '/root/.config/gcloud/application_default_credentials.json'
+        ] = "/root/.config/gcloud/application_default_credentials.json"
         self.volumes[expanduser("~") + "/.config/gcloud"] = {
             "bind": "/root/.config/gcloud",
             "mode": "rw",
@@ -167,7 +203,7 @@ class LocalContainer:
         for log in container.logs(stream=True):
             try:
                 # assume bytes output from container logs
-                print(log.rstrip().decode('utf-8'))
+                print(log.rstrip().decode("utf-8"))
             except AttributeError:
                 # accept string output
                 print(log.rstrip())
@@ -186,11 +222,11 @@ class LocalContainer:
                 stderr=True,
                 stdout=True,
                 detach=True,
-                ports={'8888/tcp': self.port},
+                ports={"8888/tcp": self.port},
                 auto_remove=self.autoremove,
             )
         except docker.errors.NotFound:
-            self.environment.pop('SSH_AUTH_SOCK')
+            self.environment.pop("SSH_AUTH_SOCK")
             output = self.client.containers.run(
                 image=self.image,
                 name=self.name,
@@ -201,7 +237,7 @@ class LocalContainer:
                 stderr=True,
                 stdout=True,
                 detach=True,
-                ports={'8888/tcp': self.port},
+                ports={"8888/tcp": self.port},
                 auto_remove=self.autoremove,
             )
         if self.logs:
