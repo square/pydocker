@@ -50,7 +50,11 @@ def setup_machine():
         h.write(config)
     with open(config_path, "a") as h:
         h.write(conents)
-    keys = [splitext(x)[0] for x in glob.glob(os.path.join(ssh_path, "*.pub"))]
+    keys = [
+        splitext(x)[0]
+        for x in glob.glob(os.path.join(ssh_path, "*.pub"))
+        if not x.endswith("-cert.pub")  # filter out signed keys
+    ]
     for key in keys:
         if not os.path.isfile(key):
             logger.warning("No private key for {}, skipping".format(key))
