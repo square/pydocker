@@ -5,3 +5,5 @@ python:
 cache: pip
 install:
   - pip install .
+script:
+  - python setup.py sdist
