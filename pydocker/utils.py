@@ -52,10 +52,13 @@ def setup_machine():
         h.write(conents)
     keys = [splitext(x)[0] for x in glob.glob(os.path.join(ssh_path, "*.pub"))]
     for key in keys:
-        logger.info("Adding key {}".format(key))
-        dest = os.path.join(cloud_path, basename(key))
-        if os.path.lexists(dest) is False:
-            bash("cp {} {}".format(key, dest))
+        if not os.path.isfile(key):
+            logger.warning("No private key for {}, skipping".format(key))
+        else:
+            logger.info("Adding key {}".format(key))
+            dest = os.path.join(cloud_path, basename(key))
+            if os.path.lexists(dest) is False:
+                bash("cp {} {}".format(key, dest))
 
 
 def start_ssh():
