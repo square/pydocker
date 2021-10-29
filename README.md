@@ -153,7 +153,7 @@ This will open a status server which will show a page with information about all
 
 ### Setup
 
-`pip install -e .`
+`pip install -e .[test]`
 
 ### Tests
 
@@ -166,9 +166,7 @@ To run them locally:
     pytest
 
 ### Continuous Integrations
-CI is handled through travis, and will run non-GCS tests on both 2.7 and 3.6.
-We may add cloud storage tests to travis soon, but for now tests should also be
-run locally to confirm that functionality works as well.
+CI is handled through GitHub Actions.
 
 
 ### Versions and Tags
